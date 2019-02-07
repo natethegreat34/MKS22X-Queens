@@ -76,6 +76,7 @@ public class QueenBoard{
       for (int i = 0; c + i < max; i ++){
           board [r] [c + i] = board [r - i] [c + i]  - 1 ;
       }
+      board [r][c] = 0;
       return true;
   }
 /**
@@ -90,7 +91,20 @@ public class QueenBoard{
   *(pythonic string notation for clarity,
   *excludes the character up to the *)
   */
-  public String toString(){}
+  public String toString(){
+      String [][] display = "";
+      for (int y = 0; y < board.length; y++){
+        for (int x = 0; x < board[y].length; x++){
+            if( board [y][x] > 0){
+                display [y][x] = "_";
+            }
+            else {
+                display [y][x] = "Q";
+            }
+  }
+}
+    return display;
+}
 
 
   /**
@@ -98,7 +112,18 @@ public class QueenBoard{
   *        true when the board is solveable, and leaves the board in a solved state
   *@throws IllegalStateException when the board starts with any non-zero value
   */
-  public boolean solve(){}
+  public boolean solve(){
+      int sum = 0;
+      for (int y = 0; y < board.length; y++){
+        for (int x = 0; x < board[y].length; x++){
+            if( board [y][x] < 0){
+                sum++;
+            }}}
+    if (max == sum){
+        return true;
+    }
+    return false;
+  }
 
   /**
   *@return the number of solutions found, and leaves the board filled with only 0's
