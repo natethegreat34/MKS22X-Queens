@@ -112,7 +112,15 @@ public class QueenBoard{
   *        true when the board is solveable, and leaves the board in a solved state
   *@throws IllegalStateException when the board starts with any non-zero value
   */
+  private void solver (int y, int x){
+      addQueen(y, x);
+      if (y == max){
+      solver (0, x +1);
+  }
+    solver (y + 1, x);
+  }
   public boolean solve(){
+      solver(0,0);
       int sum = 0;
       for (int y = 0; y < board.length; y++){
         for (int x = 0; x < board[y].length; x++){
@@ -129,5 +137,7 @@ public class QueenBoard{
   *@return the number of solutions found, and leaves the board filled with only 0's
   *@throws IllegalStateException when the board starts with any non-zero value
   */
-  public int countSolutions(){}
+  public int countSolutions(){
+
+  }
   }
