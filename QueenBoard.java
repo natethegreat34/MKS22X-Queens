@@ -8,6 +8,9 @@ public class QueenBoard{
         if (board [r] [c] != 0) {
             return false;
         }
+        return true;
+    }
+    private void adder (int r, int c){
         board [r] [c] = -1;
         //  >/
         for (int i = 0; c + i < max && r- i >= 0; i ++){
@@ -113,14 +116,28 @@ public class QueenBoard{
   *@throws IllegalStateException when the board starts with any non-zero value
   */
   private void solver (int y, int x){
-      addQueen(y, x);
-      if (y == max){
-      solver (0, x +1);
-  }
-    solver (y + 1, x);
-  }
-  public boolean solve(){
-      solver(0,0);
+      if (y < 0 || x < 0){
+          throw new IllegalStateException ("");
+      }
+      if (addQueen(y, x)){
+          adder(y, x);
+      }
+      if ( y == max && x == max){
+          // removeQueen or something to back track
+      }
+      if (!checker){
+          if (y == max){
+              solver (0, x +1);
+          }
+          if (y == 0 && x == 0){
+              solver (0, x +1);
+          }
+         if ((y != 0 || x !=0) && y != max){
+         solver (y + 1, x);
+    }
+}
+}
+  private boolean checker (){
       int sum = 0;
       for (int y = 0; y < board.length; y++){
         for (int x = 0; x < board[y].length; x++){
@@ -131,13 +148,38 @@ public class QueenBoard{
         return true;
     }
     return false;
-  }
+}
+
+
+  public boolean solve(){
+      int sum = 0;
+      for (int y = 0; y < board.length; y++){
+        for (int x = 0; x < board[y].length; x++){
+            if( board [y][x] < 0){
+                sum++;
+            }}}
+    if (max == sum){
+        return true;
+    }
+    return false;
+}
+
+  //     solver(0, 0);
+  //
+  //   for (int y = 0; y < board.length; y++){
+  //     for (int x = 0; x < board[y].length; x++){
+  //         board [y][x] = 0;}}
+  //   return false;
+  // }
 
   /**
   *@return the number of solutions found, and leaves the board filled with only 0's
   *@throws IllegalStateException when the board starts with any non-zero value
   */
   public int countSolutions(){
+      if (n < max){
+          if (solve (n, 0))
 
+      }
   }
   }
