@@ -115,39 +115,56 @@ public class QueenBoard{
   *        true when the board is solveable, and leaves the board in a solved state
   *@throws IllegalStateException when the board starts with any non-zero value
   */
-  private void solver (int y, int x){
+  private boolean solve (int y, int x){
+      if (y == max && x == 0){
+          boolean lastone = true;
+      }
       boolean added = false;
       if (y < 0 || x < 0){
           throw new IllegalStateException ("");
       }
+
+      if (checker()){
+          return true;
+      }
+
       if (addQueen(y, x)){
           adder(y, x);
           added = true;
+          solve (0, x + 1);
       }
-      if (added){
-          solver (0, x + 1);
+      if (y == max && x == max && findcolQ (x) < 0){
+          if (lastone){
+              for (int y = 0; y < board.length; y++){
+                for (int x = 0; x < board[y].length; x++){
+                    board [y][x] = 0;}}}
+          return false;
+     }
+      if (y == max && findcolQ (x) < 0){
+          removeQueen(y, x);
+          solver (findcolQ (x - 1) + 1, x-1);
       }
-      if (y == max && !findcolQ (x)){
-          
-      }
-      if (!checker() && !added){
+
+      if (!solve() && !added){
           if (y == max){
               solver (0, x +1);
           }
+
           if (y == 0 && x == 0){
               solver (0, x +1);
           }
+
          if ((y != 0 || x !=0) && y != max){
-         solver (y + 1, x);
+             solver (y + 1, x);
+        }
     }
-}
 }
 private boolean findcolQ (int x){
     for (int y =0; y < board.length; y ++){
         if (board [y] [x] < 0){
-            return true;
+            return y;
         }
-        return false;
+        return -1;
     }
 }
   private boolean checker (){
@@ -163,22 +180,22 @@ private boolean findcolQ (int x){
     return false;
 }
 
-
-  public boolean solve(){
-      if ( size < 0){
-          throw new IllegalStateException ("");
-      }
-      int sum = 0;
-      for (int y = 0; y < board.length; y++){
-        for (int x = 0; x < board[y].length; x++){
-            if( board [y][x] < 0){
-                sum++;
-            }}}
-    if (max == sum){
-        return true;
-    }
-    return false;
-}
+//
+//   public boolean solve(){
+//       if ( size < 0){
+//           throw new IllegalStateException ("");
+//       }
+//       int sum = 0;
+//       for (int y = 0; y < board.length; y++){
+//         for (int x = 0; x < board[y].length; x++){
+//             if( board [y][x] < 0){
+//                 sum++;
+//             }}}
+//     if (max == sum){
+//         return true;
+//     }
+//     return false;
+// }
 
   //     solver(0, 0);
   //
@@ -192,9 +209,13 @@ private boolean findcolQ (int x){
   *@return the number of solutions found, and leaves the board filled with only 0's
   *@throws IllegalStateException when the board starts with any non-zero value
   */
-  public int countSolutions(){
-      if (n < max){
-          if (solve (n, 0))
+  public int countSolutions(int times, int n){
+      if (solve (n,0)){
+          times ++;
+      }
+
+
+
 
       }
   }
