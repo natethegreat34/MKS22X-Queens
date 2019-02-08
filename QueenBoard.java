@@ -209,10 +209,18 @@ private boolean findcolQ (int x){
   *@return the number of solutions found, and leaves the board filled with only 0's
   *@throws IllegalStateException when the board starts with any non-zero value
   */
-  public int countSolutions(int times, int n){
+  public int countSolutions(){
+      return lava (0, 0);
+  }
+  public int lava (int times, int n){
+      if (n == max){
+          return times;
+      }
       if (solve (n,0)){
           times ++;
       }
+      lava (times, n + 1);
+  }
 
 
 
