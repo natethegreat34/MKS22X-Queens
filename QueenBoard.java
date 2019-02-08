@@ -116,16 +116,21 @@ public class QueenBoard{
   *@throws IllegalStateException when the board starts with any non-zero value
   */
   private void solver (int y, int x){
+      boolean added = false;
       if (y < 0 || x < 0){
           throw new IllegalStateException ("");
       }
       if (addQueen(y, x)){
           adder(y, x);
+          added = true;
       }
-      if ( y == max && x == max){
-          // removeQueen or something to back track
+      if (added){
+          solver (0, x + 1);
       }
-      if (!checker){
+      if (y == max && !findcolQ (x)){
+          
+      }
+      if (!checker() && !added){
           if (y == max){
               solver (0, x +1);
           }
@@ -136,6 +141,14 @@ public class QueenBoard{
          solver (y + 1, x);
     }
 }
+}
+private boolean findcolQ (int x){
+    for (int y =0; y < board.length; y ++){
+        if (board [y] [x] < 0){
+            return true;
+        }
+        return false;
+    }
 }
   private boolean checker (){
       int sum = 0;
@@ -152,6 +165,9 @@ public class QueenBoard{
 
 
   public boolean solve(){
+      if ( size < 0){
+          throw new IllegalStateException ("");
+      }
       int sum = 0;
       for (int y = 0; y < board.length; y++){
         for (int x = 0; x < board[y].length; x++){
