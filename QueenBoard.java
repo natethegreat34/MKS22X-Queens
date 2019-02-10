@@ -44,7 +44,6 @@ public class QueenBoard{
         for (int i = 0; c + i < max; i ++){
             board [r] [c + i] = 1;
         }
-        return true;
     }
   private boolean removeQueen(int r, int c){
       //  >/
@@ -95,14 +94,17 @@ public class QueenBoard{
   *excludes the character up to the *)
   */
   public String toString(){
-      String [][] display = "";
+      String display = "";
       for (int y = 0; y < board.length; y++){
         for (int x = 0; x < board[y].length; x++){
             if( board [y][x] > 0){
-                display [y][x] = "_";
+                display = display + "_";
             }
             else {
-                display [y][x] = "Q";
+                display = display + "Q";
+            }
+            if (x == max - 1){
+                display = display + "\n";
             }
   }
 }
@@ -116,8 +118,9 @@ public class QueenBoard{
   *@throws IllegalStateException when the board starts with any non-zero value
   */
   private boolean solve (int y, int x){
+      boolean lastone = false;
       if (y == max && x == 0){
-          boolean lastone = true;
+          lastone = true;
       }
       boolean added = false;
       if (y < 0 || x < 0){
@@ -135,37 +138,38 @@ public class QueenBoard{
       }
       if (y == max && x == max && findcolQ (x) < 0){
           if (lastone){
-              for (int y = 0; y < board.length; y++){
-                for (int x = 0; x < board[y].length; x++){
-                    board [y][x] = 0;}}}
+              for (int a = 0; a < board.length; a++){
+                for (int b = 0; b < board[y].length; b++){
+                    board [a][b] = 0;}}}
           return false;
      }
       if (y == max && findcolQ (x) < 0){
           removeQueen(y, x);
-          solver (findcolQ (x - 1) + 1, x-1);
+          solve(findcolQ (x - 1) + 1, x-1);
       }
 
-      if (!solve() && !added){
+      if (!added){
           if (y == max){
-              solver (0, x +1);
+              solve(0, x +1);
           }
 
           if (y == 0 && x == 0){
-              solver (0, x +1);
+              solve (0, x +1);
           }
 
          if ((y != 0 || x !=0) && y != max){
-             solver (y + 1, x);
+             solve(y + 1, x);
         }
     }
+    return false;
 }
-private boolean findcolQ (int x){
+private int findcolQ (int x){
     for (int y =0; y < board.length; y ++){
         if (board [y] [x] < 0){
             return y;
         }
-        return -1;
     }
+        return -1;
 }
   private boolean checker (){
       int sum = 0;
@@ -213,18 +217,16 @@ private boolean findcolQ (int x){
       return lava (0, 0);
   }
   public int lava (int times, int n){
-      if (n == max){
-          return times;
+      if (n != max){
+          if (solve (n,0)){
+              times ++;
+          }
+          lava (times, n + 1);
       }
-      if (solve (n,0)){
-          times ++;
-      }
-      lava (times, n + 1);
+      return times;
   }
 
 
 
 
       }
-  }
-  }
