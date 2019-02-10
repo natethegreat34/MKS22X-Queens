@@ -2,6 +2,7 @@ public class QueenBoard{
     private int[][]board;
     private int max;
     private boolean lastone;
+    private boolean notfirst;
     public QueenBoard(int size){
         max = size;
         board = new int [max][max];
@@ -170,6 +171,12 @@ public class QueenBoard{
           throw new IllegalStateException ("");
           return false;
         }
+
+      if (y == 0 && x == 0){
+          notfirst = true;
+          return solve (0, x +1);
+      }
+      if (notfirst){
       if (y == max && x == 0){
           lastone = true;
       }
@@ -179,44 +186,46 @@ public class QueenBoard{
       // - - - -
       // Q - - -
 
-
+      // If it is solved, return true, keeping the board solved.
       if (checker()){
           return true;
       }
 
+      // If you can add a queen, add one and move onto the next column
       if (addQueen(y, x)){
           adder(y, x);
           return solve (0, x + 1);
       }
 
+      // If one can't add a queen to the second coluumn, and the Queen is on the bottom of the first column, return false.
       if (!free (1)){
           if (lastone){
               setup();}
           return false;
      }
+
+     // If one can't add a queen to the current column, go to the one before this column and remove the current queen, and try to add it one spcae lower and continue
      if (!free (x)){
          remover(findcolQ (x), x - 1);
+         if (findcolQ (x) == max){
+             // Two queens can't ever be on the same row
+             return solve (findcolQ (x) + 1, x - 2);
+         }
+         return solve (findcolQ (x) + 1, x - 1);
      }
-      if (y == max && findcolQ (x) < 0){
-          removeQueen(y, x);
-          return solve(findcolQ (x - 1) + 1, x-1);
-      }
-
-          if (y == max){
-              return solve(0, x +1);
-          }
-
-          if (y == 0 && x == 0){
-              return solve (0, x +1);
-          }
-
-         if ((y != 0 || x !=0) && y != max){
-             return solve(y + 1, x);
-        }
-    return false;
+     return solve(y + 1, x);
+ }
 }
-private boolean free(int x){
-    for (int y = 0; y < board.length; y ++){
+
+
+
+
+
+
+
+
+private boolean free(int x, int z){
+    for (int y = 0; y < z; y ++){
         if (board [y] [x] = 0){
             return true;
         }
