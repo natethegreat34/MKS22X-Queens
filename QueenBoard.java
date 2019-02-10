@@ -137,12 +137,16 @@ public class QueenBoard{
   *(pythonic string notation for clarity,
   *excludes the character up to the *)
   */
+  //      /
+  //     /
+  // \  /
+  //  v
   public String toString(){
       String display = "";
       for (int y = 0; y < board.length; y++){
         for (int x = 0; x < board[y].length; x++){
-            if( board [y][x] > 0){
-                display = display + "_";
+            if( board [y][x] >= 0){
+                display = display + "_ ";
             }
             else {
                 display = display + "Q";
