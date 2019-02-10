@@ -1,7 +1,7 @@
 public class QueenBoard{
     private int[][]board;
     private int max;
-
+    private boolean lastone;
     public QueenBoard(int size){
         max = size;
         board = new int [max][max];
@@ -166,14 +166,19 @@ public class QueenBoard{
   *@throws IllegalStateException when the board starts with any non-zero value
   */
   private boolean solve (int y, int x){
-      boolean lastone = false;
+      if (y < 0 || x < 0){
+          throw new IllegalStateException ("");
+          return false;
+        }
       if (y == max && x == 0){
           lastone = true;
       }
-      boolean added = false;
-      if (y < 0 || x < 0){
-          throw new IllegalStateException ("");
-      }
+      // ^^^^^^^
+      // - - - -
+      // - - - -
+      // - - - -
+      // Q - - -
+
 
       if (checker()){
           return true;
@@ -181,20 +186,22 @@ public class QueenBoard{
 
       if (addQueen(y, x)){
           adder(y, x);
-          added = true;
           return solve (0, x + 1);
       }
-      if (y == max && x == max && findcolQ (x) < 0){
+
+      if (!free (1)){
           if (lastone){
               setup();}
           return false;
+     }
+     if (!free (x)){
+         remover(findcolQ (x), x - 1);
      }
       if (y == max && findcolQ (x) < 0){
           removeQueen(y, x);
           return solve(findcolQ (x - 1) + 1, x-1);
       }
 
-      if (!added){
           if (y == max){
               return solve(0, x +1);
           }
@@ -206,11 +213,19 @@ public class QueenBoard{
          if ((y != 0 || x !=0) && y != max){
              return solve(y + 1, x);
         }
-    }
     return false;
 }
+private boolean free(int x){
+    for (int y = 0; y < board.length; y ++){
+        if (board [y] [x] = 0){
+            return true;
+        }
+    }
+        return false;
+}
+
 private int findcolQ (int x){
-    for (int y =0; y < board.length; y ++){
+    for (int y = 0; y < board.length; y ++){
         if (board [y] [x] < 0){
             return y;
         }
