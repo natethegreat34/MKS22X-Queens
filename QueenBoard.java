@@ -1,8 +1,7 @@
 public class QueenBoard{
     private int[][]board;
     private int max;
-    private boolean lastone;
-    private boolean notfirst;
+    private int total;
     public QueenBoard(int size){
         max = size;
         board = new int [max][max];
@@ -94,35 +93,35 @@ public class QueenBoard{
     private void remover (int r, int c){
       //  >/
       for (int i = 0; c + i < max && r- i >= 0; i ++){
-          board [r - i] [c + i] = board [r - i] [c + i]  - 1 ;
+          board [r - i] [c + i] +=  - 1 ;
       }
       // <\
       for (int i = 0; c- i >= 0 && r- i >= 0; i ++){
-          board [r- i] [c- i] = board [r - i] [c + i]  - 1 ;
+          board [r- i] [c- i] +=  - 1 ;
       }
       // >\
       for (int i = 0; c+ i < max && r+ i < max; i ++){
-          board [r+ i] [c+ i] = board [r - i] [c + i]  - 1 ;
+          board [r+ i] [c+ i] +=  - 1 ;
       }
       // </
       for (int i = 0; c- i >= 0 && r+ i < max; i ++){
-          board [r + i] [c - i] = board [r - i] [c + i]  - 1 ;
+          board [r + i] [c - i] +=  - 1 ;
       }
       //  >
       for (int i = 0; r+ i < max; i ++){
-          board [r + i] [c] = board [r - i] [c + i]  - 1 ;
+          board [r + i] [c] +=  - 1 ;
       }
       // <
       for (int i = 0; r - i >= 0 ; i ++){
-          board [r - i] [c] = board [r - i] [c + i]  - 1 ;
+          board [r - i] [c] +=  - 1 ;
       }
       // v
       for (int i = 0; c - i >= 0; i ++){
-          board [r] [c - i] = board [r - i] [c + i]  - 1 ;
+          board [r] [c - i] +=  - 1 ;
       }
       // ^
       for (int i = 0; c + i < max; i ++){
-          board [r] [c + i] = board [r - i] [c + i]  - 1 ;
+          board [r] [c + i] +=  - 1 ;
       }
       board [r][c] = 0;
   }
@@ -150,7 +149,7 @@ public class QueenBoard{
                 display = display + "_ ";
             }
             else {
-                display = display + "Q";
+                display = display + "Q ";
             }
             if (x == max - 1){
                 display = display + "\n";
@@ -166,56 +165,71 @@ public class QueenBoard{
   *        true when the board is solveable, and leaves the board in a solved state
   *@throws IllegalStateException when the board starts with any non-zero value
   */
-  private boolean solve (int y, int x){
-      if (y < 0 || x < 0){
+
+  private void solve (int y){
+      System.out.println(toString());
+     if (y >= max){
+         total ++;
+     }
+     else{
+      if (y < 0 ){
           throw new IllegalStateException ("");
-          return false;
         }
+        for (int x = 0; x < max; x ++){
+            if (addQueen(y,x)){
+                adder(y,x);
+                solve (y + 1);
 
-      if (y == 0 && x == 0){
-          notfirst = true;
-          return solve (0, x +1);
-      }
-      if (notfirst){
-      if (y == max && x == 0){
-          lastone = true;
-      }
-      // ^^^^^^^
-      // - - - -
-      // - - - -
-      // - - - -
-      // Q - - -
-
-      // If it is solved, return true, keeping the board solved.
-      if (checker()){
-          return true;
-      }
-
-      // If you can add a queen, add one and move onto the next column
-      if (addQueen(y, x)){
-          adder(y, x);
-          return solve (0, x + 1);
-      }
-
-      // If one can't add a queen to the second coluumn, and the Queen is on the bottom of the first column, return false.
-      if (!free (1)){
-          if (lastone){
-              setup();}
-          return false;
-     }
-
-     // If one can't add a queen to the current column, go to the one before this column and remove the current queen, and try to add it one spcae lower and continue
-     if (!free (x)){
-         remover(findcolQ (x), x - 1);
-         if (findcolQ (x) == max){
-             // Two queens can't ever be on the same row
-             return solve (findcolQ (x) + 1, x - 2);
-         }
-         return solve (findcolQ (x) + 1, x - 1);
-     }
-     return solve(y + 1, x);
- }
+            remover(y, x);
+        }
+        }
+    }
 }
+
+
+
+
+//
+//
+//
+//
+// System.out.println(toString());
+//       // - - - -
+//       // - - - -
+//       // - - - -
+//       // Q - - -
+//
+//       // If it is solved, return true, keeping the board solved.
+//       if (checker()){
+//           return true;
+//       }
+//
+//       // If you can add a queen, add one and move onto the next column
+//       if (addQueen(y, x)){
+//           adder(y, x);
+//           if (solve (0, x + 1)){
+//               return true;
+//           }
+//       }
+//       else {
+//           solve (y + 1, x);
+//       }
+//
+//       // If one can't add a queen to the second coluumn, and the Queen is on the bottom of the first column, return false.
+//       if (!free (1, max)){
+//               setup();
+//           return false;
+//      }
+//
+//      // If one can't add a queen to the current column, go to the one before this column and remove the current queen, and try to add it one spcae lower and continue
+//      if (!free (x, max)){
+//          if (x >= 1){
+//          remover(findcolQ (x - 1), x - 1);
+//          return solve (findcolQ (x - 1) + 1, x - 1);
+//      }
+//  }
+//  return false;
+// }
 
 
 
@@ -226,7 +240,7 @@ public class QueenBoard{
 
 private boolean free(int x, int z){
     for (int y = 0; y < z; y ++){
-        if (board [y] [x] = 0){
+        if (board [y] [x] == 0){
             return true;
         }
     }
@@ -284,19 +298,7 @@ private int findcolQ (int x){
   *@throws IllegalStateException when the board starts with any non-zero value
   */
   public int countSolutions(){
-      return lava (0, 0);
+      solve (0);
+      return total;
   }
-  public int lava (int times, int n){
-      if (n != max){
-          if (solve (n,0)){
-              times ++;
-          }
-          lava (times, n + 1);
-      }
-      return times;
-  }
-
-
-
-
       }
