@@ -167,7 +167,7 @@ public class QueenBoard{
   */
 
   private void solve (int y){
-      System.out.println(toString());
+      // System.out.println(toString());
      if (y >= max){
          total ++;
      }
@@ -298,6 +298,12 @@ private int findcolQ (int x){
   *@throws IllegalStateException when the board starts with any non-zero value
   */
   public int countSolutions(){
+      if (max == 0){
+          return 0;
+      }
+      if (board [0] [0] != 0){
+          throw new IllegalStateException ("");
+      }
       solve (0);
       return total;
   }
