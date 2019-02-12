@@ -169,7 +169,7 @@ public class QueenBoard{
   //     /
   // \  /
   //  v
-  private void solve (int y){
+  public void solve (int y){
       // System.out.println(toString());
      if (y >= max){
          //If you completed all of the given columns, you succeeded in finding a solution
